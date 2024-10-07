@@ -10,23 +10,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class MealServlet extends HttpServlet {
-    private static final Logger log = getLogger(UserServlet.class);
+    public static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
+    private static final Logger log = getLogger(MealServlet.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("redirect to meals");
 
-        List<MealTo> mealToList = MealsUtil.filteredByStreams(MealsUtil.getMeals(),
-                LocalTime.MIN, LocalTime.MAX, MealsUtil.getDefaultCaloriesPerDay());
+        List<MealTo> mealToList = MealsUtil.filteredByStreams(MealsUtil.meals,
+                LocalTime.MIN, LocalTime.MAX, MealsUtil.DEFAULT_CALORIES_PER_DAY);
         request.setAttribute("mealToList", mealToList);
-
-//        response.sendRedirect("meals.jsp");
+        request.setAttribute("dateFormatter", formatter);
         request.getRequestDispatcher("meals.jsp").forward(request, response);
-
     }
 }

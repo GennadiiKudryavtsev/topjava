@@ -30,7 +30,7 @@
                         <c:forEach var = "meal" items="${mealToList}">
                             <jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.model.MealTo" />
                             <tr style="color: ${meal.excess ? 'red' : 'green'}">
-                                <td>${meal.dateTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))}</td>
+                                <td>${meal.dateTime.format(dateFormatter)}</td>
                                 <td>${meal.description}</td>
                                 <td>${meal.calories}</td>
                             </tr>
