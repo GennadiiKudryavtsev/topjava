@@ -13,13 +13,15 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import static ru.javawebinar.topjava.web.SecurityUtil.authUserId;
+
 public class InMemoryMealRepository implements MealRepository {
     private static final Logger log = LoggerFactory.getLogger(InMemoryMealRepository.class);
     private Map<Integer, Meal> repository = new ConcurrentHashMap<>();
     private AtomicInteger counter = new AtomicInteger(0);
 
     {
-        MealsUtil.meals.forEach(meal -> save(meal.getUserId(), meal));
+        MealsUtil.MEALS.forEach(meal -> save(authUserId(), meal));
     }
 
     @Override
@@ -28,9 +30,9 @@ public class InMemoryMealRepository implements MealRepository {
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
             repository.put(meal.getId(), meal);
+            meal.setUserId(userId);
             return meal;
         }
-        // handle case: update, but not present in storage
         if (meal.getUserId() != userId) {
             throw new IllegalArgumentException("Wrong user id!");
         }
@@ -40,7 +42,6 @@ public class InMemoryMealRepository implements MealRepository {
     @Override
     public boolean delete(int userId, int id) {
         log.info("delete {} for {}", id, userId);
-
         return repository.get(id).getUserId() == userId && repository.remove(id) != null;
     }
 
@@ -59,8 +60,7 @@ public class InMemoryMealRepository implements MealRepository {
     @Override
     public List<Meal> getAll(int userId, LocalDate startDate, LocalDate endDate) {
         log.info("getAll filtered by date and time");
-
-        return new ArrayList<>(repository.values())
+        return repository.values()
                 .stream()
                 .filter(meal -> meal.getUserId() == userId)
                 .filter(meal -> DateTimeUtil.isBetween(meal.getDate(), startDate, endDate))

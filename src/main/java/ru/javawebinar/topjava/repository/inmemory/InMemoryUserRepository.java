@@ -8,14 +8,15 @@ import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Repository
 public class InMemoryUserRepository implements UserRepository {
     private static final Logger log = LoggerFactory.getLogger(InMemoryUserRepository.class);
-    private final Map<Integer, User> repository = new HashMap<>();
-    private final AtomicInteger counter = new AtomicInteger(0);
+    private Map<Integer, User> repository = new ConcurrentHashMap<>();
+    private AtomicInteger counter = new AtomicInteger(0);
 
     {
         save(new User(1, "User", "user@gmail.com", "1234", 2500, true, EnumSet.of(Role.USER)));
@@ -36,7 +37,7 @@ public class InMemoryUserRepository implements UserRepository {
             repository.put(user.getId(), user);
             return user;
         }
-        return repository.computeIfPresent(user.getId(), (id, oldMeal) -> user);
+        return repository.computeIfPresent(user.getId(), (id, oldUser) -> user);
     }
 
     @Override
