@@ -26,7 +26,7 @@ public class Meal extends AbstractBaseEntity {
     public static final String ALL_SORTED = "Meal.getAllSorted";
     public static final String BETWEEN_HALF_OPEN = "Meal.getBetweenHalfOpen";
 
-    @Column(name = "date_time", nullable = false, columnDefinition = "timestamp default now()")
+    @Column(nullable = false)
     @NotNull
     private LocalDateTime dateTime;
 
@@ -40,8 +40,7 @@ public class Meal extends AbstractBaseEntity {
     private int calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    @NotNull
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public Meal() {

@@ -1,7 +1,6 @@
 package ru.javawebinar.topjava.service;
 
 import org.junit.*;
-import org.junit.rules.ExpectedException;
 import org.junit.rules.Stopwatch;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
@@ -13,7 +12,6 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
@@ -39,18 +37,13 @@ public class MealServiceTest {
 
     @Autowired
     private MealService service;
-    @Autowired
-    private MealRepository repository;
-
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
 
     @Rule
     public Stopwatch watcher = new Stopwatch() {
 
         @Override
         protected void finished(long nanos, Description description) {
-            String rowLog = String.format("%1$" + 5 + "s", String.valueOf(TimeUnit.NANOSECONDS.toMillis(nanos)) + " ms - " + description.getMethodName());
+            String rowLog = String.format("%1$" + 5 + "s", TimeUnit.NANOSECONDS.toMillis(nanos) + " ms - " + description.getMethodName());
             logger.info(rowLog);
             logBuilder.append(rowLog + "\n");
         }
@@ -64,7 +57,7 @@ public class MealServiceTest {
     @Test
     public void delete() {
         service.delete(MEAL1_ID, USER_ID);
-        Assert.assertNull(repository.get(MEAL1_ID, USER_ID));
+        assertThrows(NotFoundException.class, () -> service.get(MEAL1_ID, USER_ID));
     }
 
     @Test
@@ -79,9 +72,9 @@ public class MealServiceTest {
 
     @Test
     public void create() {
+        Meal created = service.create(getNew(), USER_ID);
+        int newId = created.id();
         Meal newMeal = getNew();
-        Meal created = service.create(newMeal, USER_ID);
-        Integer newId = created.getId();
         newMeal.setId(newId);
         MEAL_MATCHER.assertMatch(created, newMeal);
         MEAL_MATCHER.assertMatch(service.get(newId, USER_ID), newMeal);
