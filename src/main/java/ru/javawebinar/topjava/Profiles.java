@@ -1,7 +1,5 @@
 package ru.javawebinar.topjava;
 
-import org.springframework.util.ClassUtils;
-
 public class Profiles {
     public static final String
             JDBC = "jdbc",
@@ -16,12 +14,16 @@ public class Profiles {
 
     //  Get DB profile depending of DB driver in classpath
     public static String getActiveDbProfile() {
-        if (ClassUtils.isPresent("org.postgresql.Driver", null)) {
+        try {
+            Class.forName("org.postgresql.Driver");
             return POSTGRES_DB;
-        } else if (ClassUtils.isPresent("org.hsqldb.jdbcDriver", null)) {
-            return HSQL_DB;
-        } else {
-            throw new IllegalStateException("Could not find DB driver");
+        } catch (ClassNotFoundException ex) {
+            try {
+                Class.forName("org.hsqldb.jdbcDriver");
+                return Profiles.HSQL_DB;
+            } catch (ClassNotFoundException e) {
+                throw new IllegalStateException("Could not find DB driver");
+            }
         }
     }
 }

@@ -40,6 +40,6 @@ public class InMemoryBaseRepository<T extends AbstractBaseEntity> {
 
     void put(T entity) {
         Objects.requireNonNull(entity, "Entity must not be null");
-        map.put(entity.id(), entity);
+        map.put(entity.getId(), entity);
     }
 }
