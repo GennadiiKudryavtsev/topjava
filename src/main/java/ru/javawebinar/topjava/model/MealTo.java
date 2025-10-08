@@ -1,10 +1,11 @@
 package ru.javawebinar.topjava.model;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class MealTo {
+
     private final Integer id;
+
     private final LocalDateTime dateTime;
 
     private final String description;
@@ -41,14 +42,11 @@ public class MealTo {
         return excess;
     }
 
-    public String getFormattedDateTime() {
-        return dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-    }
-
     @Override
     public String toString() {
         return "MealTo{" +
-                "dateTime=" + dateTime +
+                "id=" + id +
+                ", dateTime=" + dateTime +
                 ", description='" + description + '\'' +
                 ", calories=" + calories +
                 ", excess=" + excess +

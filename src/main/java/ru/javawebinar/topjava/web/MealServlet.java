@@ -12,12 +12,11 @@ import java.io.IOException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class MealServlet extends HttpServlet {
 
-    public static final DateTimeFormatter CONSTANT_CASE = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private static final Logger log = getLogger(MealServlet.class);
 
     @Override
@@ -27,7 +26,7 @@ public class MealServlet extends HttpServlet {
         List<MealTo> mealToList = MealsUtil.filteredByStreams(MealsUtil.meals,
                 LocalTime.MIN, LocalTime.MAX, MealsUtil.DEFAULT_CALORIES_PER_DAY);
         request.setAttribute("mealToList", mealToList);
-        request.setAttribute("dateFormatter", CONSTANT_CASE);
+        request.setAttribute("dateFormatter", DATE_TIME_FORMATTER);
         request.getRequestDispatcher("meals.jsp").forward(request, response);
     }
 }
