@@ -14,6 +14,30 @@
         <h2>Meals</h2>
             <div class="row">
                 <div class="col-sm-12">
+ <form method="post" action="meals">
+        <!-- Дата и время -->
+        <div class="form-group">
+            <label for="dateTime">Дата и время</label>
+            <input type="datetime-local" class="form-control" id="dateTime" name="dateTime" required>
+        </div>
+
+        <!-- Описание -->
+        <div class="form-group">
+            <label for="description">Описание</label>
+            <input type="text" class="form-control" id="description" name="description"
+                   placeholder="Например: Завтрак" required>
+        </div>
+
+        <!-- Калории -->
+        <div class="form-group">
+            <label for="calories">Калории</label>
+            <input type="number" class="form-control" id="calories" name="calories"
+                   placeholder="Например: 450" required>
+        </div>
+
+        <!-- Кнопка добавления -->
+        <button type="submit" class="btn btn-primary mt-3">Добавить</button>
+    </form>
                     <table class="table table-striped dataTable no-footer" id="datatable" role="grid" style="width: 1110px;">
                         <thead>
                         <tr role="row">
@@ -32,6 +56,7 @@
                      </c:forEach>
                         </tbody>
                     </table>
+
                 </div>
             </div>
         </div>

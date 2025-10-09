@@ -16,27 +16,27 @@ public class InMemoryMealRepository implements MealRepository {
     private Map<Integer, Meal> repository = new ConcurrentHashMap<>();
 
     @Override
-    public Meal save(int userId, Meal meal) {
+    public Meal save(Meal meal) {
         return null;
     }
 
     @Override
-    public boolean delete(int userId, int id) {
+    public boolean delete(int id) {
         return false;
     }
 
     @Override
-    public Meal get(int userId, int id) {
+    public Meal get(int id) {
         return null;
     }
 
     @Override
-    public List<Meal> getAll(int userId) {
+    public List<Meal> getAll(int id) {
         return null;
     }
 
     @Override
-    public List<Meal> getAll(int userId, LocalDate startDate, LocalDate endDate) {
+    public List<Meal> getAll(int id, LocalDate startDate, LocalDate endDate) {
         return null;
     }
 }
