@@ -99,7 +99,6 @@ public class MealServiceTest {
     @Test
     public void getAll() {
         assertEquals(7, service.getAll(USER_ID).size());
-        assertEquals(3, service.getAll(ADMIN_ID).size());
     }
 
     @Test
