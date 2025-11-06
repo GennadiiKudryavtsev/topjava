@@ -91,10 +91,19 @@
               p:password="${database.password}"/>
     </beans>
 
+    <!-- JDBC -->
     <beans profile="jdbc">
+        <context:component-scan base-package="ru.javawebinar.**.repository.jdbc"/>
     </beans>
+
+    <!-- JPA -->
     <beans profile="jpa">
+        <context:component-scan base-package="ru.javawebinar.**.repository.jpa"/>
     </beans>
+
+    <!-- DATA JPA -->
     <beans profile="datajpa">
+        <context:component-scan base-package="ru.javawebinar.**.repository.datajpa"/>
+        <jpa:repositories base-package="ru.javawebinar.**.repository.datajpa"/>
     </beans>
 </beans>
