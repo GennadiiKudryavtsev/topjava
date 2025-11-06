@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.service;
 
+import org.checkerframework.checker.units.qual.A;
 import org.junit.*;
 import org.junit.rules.Stopwatch;
 import org.junit.runner.Description;
@@ -16,7 +17,6 @@ import ru.javawebinar.topjava.ActiveDbProfileResolver;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
-
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.concurrent.TimeUnit;
@@ -35,7 +35,7 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 @ActiveProfiles(resolver = ActiveDbProfileResolver.class)
 //@Ignore
-public abstract class MealServiceTest {
+public abstract class MealServiceTest extends ServiceTest{
     private static final Logger log = getLogger("result");
 
     private static final StringBuilder results = new StringBuilder();

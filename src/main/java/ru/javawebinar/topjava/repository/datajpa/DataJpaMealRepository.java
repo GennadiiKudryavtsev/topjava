@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.repository.datajpa;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 
@@ -20,6 +21,7 @@ public class DataJpaMealRepository implements MealRepository {
     }
 
     @Override
+    @Transactional
     public Meal save(Meal meal, int userId) {
         if (!meal.isNew() && get(meal.getId(), userId) == null) {
             return null;
@@ -29,36 +31,23 @@ public class DataJpaMealRepository implements MealRepository {
     }
 
     @Override
+    @Transactional
     public boolean delete(int id, int userId) {
-        return crudMealRepository.findById(id)
-                .filter(meal -> meal.getUser().getId() == userId)
-                .map(meal -> {
-                    crudMealRepository.delete(meal);
-                    return true;
-                })
-                .orElse(false);
+        return crudMealRepository.deleteByIdAndUserId(id, userId) != 0;
     }
 
     @Override
     public Meal get(int id, int userId) {
-        return crudMealRepository.findById(id)
-                .filter(meal -> meal.getUser().getId() == userId)
-                .orElse(null);
+        return crudMealRepository.get(id, userId);
     }
 
     @Override
     public List<Meal> getAll(int userId) {
-        return crudMealRepository.findAll(Sort.by(Sort.Direction.DESC, "dateTime"))
-                .stream()
-                .filter(meal -> meal.getUser().getId() == userId)
-                .toList();
+        return crudMealRepository.getAllByUserIdOrderByDateTimeDesc(userId);
     }
 
     @Override
     public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
-        return crudMealRepository.findAll(Sort.by(Sort.Direction.DESC, "dateTime")).stream()
-                .filter(meal -> meal.getUser().getId() == userId)
-                .filter(meal -> !meal.getDateTime().isBefore(startDateTime) && meal.getDateTime().isBefore(endDateTime))
-                .toList();
+        return crudMealRepository.getBetweenHalfOpen(startDateTime, endDateTime, userId);
     }
 }
