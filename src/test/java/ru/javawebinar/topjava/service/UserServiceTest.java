@@ -8,7 +8,6 @@ import org.springframework.dao.DataAccessException;
 import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
-import ru.javawebinar.topjava.repository.UserRepository;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 import java.util.List;
 import static org.junit.Assert.assertThrows;
@@ -18,8 +17,6 @@ public abstract class UserServiceTest extends ServiceTest {
 
     @Autowired
     protected UserService service;
-    @Autowired
-    private UserRepository repository;
 
     @Autowired
     private CacheManager cacheManager;

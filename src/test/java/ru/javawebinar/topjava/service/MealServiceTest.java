@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.service;
 
-import org.checkerframework.checker.units.qual.A;
 import org.junit.*;
 import org.junit.rules.Stopwatch;
 import org.junit.runner.Description;
@@ -15,7 +14,6 @@ import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.javawebinar.topjava.ActiveDbProfileResolver;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 import java.time.LocalDate;
 import java.time.Month;
@@ -53,9 +51,6 @@ public abstract class MealServiceTest extends ServiceTest{
 
     @Autowired
     protected MealService service;
-    @Autowired
-    protected MealRepository repository;
-
 
     @AfterClass
     public static void printResult() {
