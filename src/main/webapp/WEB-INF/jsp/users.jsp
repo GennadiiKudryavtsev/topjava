@@ -5,18 +5,49 @@
 
 <html>
 <jsp:include page="fragments/headTag.jsp"/>
+
+<style>
+    .disabled-row {
+        opacity: 0.55;
+        background: #f2f2f2 !important;
+    }
+</style>
+
 <body>
+
 <script src="resources/js/topjava.common.js" defer></script>
-<script src="resources/js/topjava.users.js" defer></script>
+
+<script defer>
+    function enableUser(userId, checkbox) {
+        const enabled = checkbox.checked;
+
+        $.ajax({
+            url: "admin/users/" + userId,
+            type: "POST",
+            data: "enabled=" + enabled,
+            success: function () {
+                const row = $("#" + userId);
+                if (enabled) {
+                    row.removeClass("disabled-row");
+                } else {
+                    row.addClass("disabled-row");
+                }
+            }
+        });
+    }
+</script>
+
 <jsp:include page="fragments/bodyHeader.jsp"/>
 
 <div class="jumbotron pt-4">
     <div class="container">
         <h3 class="text-center"><spring:message code="user.title"/></h3>
+
         <button class="btn btn-primary" onclick="add()">
             <span class="fa fa-plus"></span>
             <spring:message code="common.add"/>
         </button>
+
         <table class="table table-striped" id="datatable">
             <thead>
             <tr>
@@ -29,65 +60,107 @@
                 <th></th>
             </tr>
             </thead>
+
+            <!-- USERS -->
             <c:forEach items="${requestScope.users}" var="user">
                 <jsp:useBean id="user" type="ru.javawebinar.topjava.model.User"/>
-                <tr id="${user.id}">
+
+                <tr id="${user.id}"
+                    class="<c:if test='${!user.enabled}'>disabled-row</c:if>">
+
                     <td><c:out value="${user.name}"/></td>
-                    <td><a href="mailto:${user.email}">${user.email}</a></td>
+
+                    <td>
+                        <a href="mailto:${user.email}">
+                            ${user.email}
+                        </a>
+                    </td>
+
                     <td>${user.roles}</td>
-                    <td><input type="checkbox" <c:if test="${user.enabled}">checked</c:if>/></td>
-                    <td><fmt:formatDate value="${user.registered}" pattern="dd-MMMM-yyyy"/></td>
-                    <td><a><span class="fa fa-pencil"></span></a></td>
-                    <td><a class="delete"><span class="fa fa-remove"></span></a></td>
+
+                    <!-- ENABLE / DISABLE CHECKBOX -->
+                    <td>
+                        <input type="checkbox"
+                               onclick="enableUser(${user.id}, this)"
+                               <c:if test="${user.enabled}">checked</c:if>
+                        >
+                    </td>
+
+                    <!-- REGISTERED DATE -->
+                    <td>
+                        <fmt:formatDate value="${user.registered}"
+                                        pattern="dd-MMMM-yyyy"/>
+                    </td>
+
+                    <td><a onclick="updateRow(${user.id})">
+                        <span class="fa fa-pencil"></span>
+                    </a></td>
+
+                    <td><a class="delete" onclick="deleteRow(${user.id})">
+                        <span class="fa fa-remove"></span>
+                    </a></td>
+
                 </tr>
             </c:forEach>
+
         </table>
     </div>
 </div>
 
+<!-- EDIT MODAL -->
 <div class="modal fade" tabindex="-1" id="editRow">
     <div class="modal-dialog">
         <div class="modal-content">
+
             <div class="modal-header">
                 <h4 class="modal-title"><spring:message code="user.add"/></h4>
-                <button type="button" class="close" data-dismiss="modal" onclick="closeNoty()">&times;</button>
+                <button type="button" class="close" data-dismiss="modal"
+                        onclick="closeNoty()">&times;</button>
             </div>
+
             <div class="modal-body">
                 <form id="detailsForm">
                     <input type="hidden" id="id" name="id">
 
                     <div class="form-group">
-                        <label for="name" class="col-form-label"><spring:message code="user.name"/></label>
-                        <input type="text" class="form-control" id="name" name="name"
-                               placeholder="<spring:message code="user.name"/>">
+                        <label class="col-form-label"><spring:message code="user.name"/></label>
+                        <input type="text" class="form-control" id="name" name="name">
                     </div>
 
                     <div class="form-group">
-                        <label for="email" class="col-form-label"><spring:message code="user.email"/></label>
-                        <input type="email" class="form-control" id="email" name="email"
-                               placeholder="<spring:message code="user.email"/>">
+                        <label class="col-form-label"><spring:message code="user.email"/></label>
+                        <input type="email" class="form-control" id="email" name="email">
                     </div>
 
                     <div class="form-group">
-                        <label for="password" class="col-form-label"><spring:message code="user.password"/></label>
-                        <input type="password" class="form-control" id="password" name="password"
-                               placeholder="<spring:message code="user.password"/>">
+                        <label class="col-form-label"><spring:message code="user.password"/></label>
+                        <input type="password" class="form-control" id="password" name="password">
                     </div>
+
                 </form>
             </div>
+
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeNoty()">
+                <button type="button"
+                        class="btn btn-secondary"
+                        data-dismiss="modal"
+                        onclick="closeNoty()">
                     <span class="fa fa-close"></span>
                     <spring:message code="common.cancel"/>
                 </button>
-                <button type="button" class="btn btn-primary" onclick="save()">
+
+                <button type="button"
+                        class="btn btn-primary"
+                        onclick="save()">
                     <span class="fa fa-check"></span>
                     <spring:message code="common.save"/>
                 </button>
             </div>
+
         </div>
     </div>
 </div>
+
 <jsp:include page="fragments/footer.jsp"/>
 </body>
 </html>
