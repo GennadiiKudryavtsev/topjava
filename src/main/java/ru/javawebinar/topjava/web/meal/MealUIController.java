@@ -30,7 +30,7 @@ public class MealUIController extends AbstractMealController {
     }
 
     @Override
-    @GetMapping( "/{id}")
+    @GetMapping("/{id}")
     @JsonView(View.JsonUI.class)
     public Meal get(@PathVariable int id) {
         return super.get(id);
