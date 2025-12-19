@@ -47,6 +47,7 @@ public class Meal extends AbstractBaseEntity {
     @Column(name = "description", nullable = false)
     @NotBlank(groups = {ValidatedUI.class, Default.class})
     @Size(min = 2, max = 120, groups = {ValidatedUI.class, Default.class})
+    @NoHtml(groups = {View.Web.class})
     private String description;
 
     @Column(name = "calories", nullable = false)
